@@ -44,7 +44,7 @@ try {
     $mail->Port = $_ENV['SMTP_PORT'];
 
     $mail->setFrom($_ENV['SMTP_FROM'], 'Feedback Bot');
-    $mail->addAddress($data['sendTo']);
+    $mail->addAddress($_ENV['SMTP_TO']);
 
     $subject = isset($data['subject']) ? $data['subject'] : 'Нове повідомлення з форми';
     $mail->Subject = $subject;
