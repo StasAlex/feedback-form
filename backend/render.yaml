@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: feedback-form
+    env: docker
+    plan: free
+    repo: https://github.com/StasAlex/feedback-form
+    dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USERNAME
+        value: stas.alex28@gmail.com
+      - key: SMTP_PASSWORD
+        value: твій_апп_пароль
+      - key: SMTP_FROM
+        value: stas.alex28@gmail.com
+      - key: SMTP_TO
+        value: 6weeks.13h@gmail.com
+
+    runtime: docker
