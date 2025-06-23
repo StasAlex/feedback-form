@@ -4,7 +4,6 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
 
-// Завантаження .env
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -32,6 +31,11 @@ if (
     exit;
 }
 
+$name = htmlspecialchars($data['name'] ?? '', ENT_QUOTES, 'UTF-8');
+$email = htmlspecialchars($data['email'] ?? '', ENT_QUOTES, 'UTF-8');
+$message = htmlspecialchars($data['message'] ?? '', ENT_QUOTES, 'UTF-8');
+$subject = htmlspecialchars($data['subject'] ?? 'Нове повідомлення з форми', ENT_QUOTES, 'UTF-8');
+
 $mail = new PHPMailer(true);
 
 try {
@@ -43,16 +47,18 @@ try {
     $mail->SMTPSecure = 'tls';
     $mail->Port = $_ENV['SMTP_PORT'];
 
+    $mail->CharSet = 'UTF-8';
+    $mail->Encoding = 'base64';
+
     $mail->setFrom($_ENV['SMTP_FROM'], 'Feedback Bot');
     $mail->addAddress($_ENV['SMTP_TO']);
 
-    $subject = isset($data['subject']) ? $data['subject'] : 'Нове повідомлення з форми';
     $encoded_subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
     $mail->Subject = $encoded_subject;
 
-    $body = "Ім’я: {$data['name']}\n";
-    $body .= "Email: {$data['email']}\n\n";
-    $body .= "Повідомлення:\n{$data['message']}";
+    $body = "Ім’я: {$name}\n";
+    $body .= "Email: {$email}\n\n";
+    $body .= "Повідомлення:\n{$message}";
     $mail->Body = $body;
 
     $mail->send();
