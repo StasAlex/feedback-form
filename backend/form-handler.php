@@ -47,7 +47,8 @@ try {
     $mail->addAddress($_ENV['SMTP_TO']);
 
     $subject = isset($data['subject']) ? $data['subject'] : 'Нове повідомлення з форми';
-    $mail->Subject = $subject;
+    $encoded_subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+    $mail->Subject = $encoded_subject;
 
     $body = "Ім’я: {$data['name']}\n";
     $body .= "Email: {$data['email']}\n\n";
